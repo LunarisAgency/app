@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>Lunaris Creator Suite - Mobile App</title>
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Lunaris" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="theme-color" content="#0b071a" />
+  <link rel="icon" type="image/x-icon" href="https://hidden-rice-48fd.direttorelunaris.workers.dev/favicon.ico" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    body {
+      background-color: #0b071a;
+      color: #f1f5f9;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      padding-bottom: 84px;
+    }
+    /* TOP NAVBAR */
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      background: rgba(11, 7, 26, 0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(168, 85, 247, 0.25);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .logo-ring {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: 2px solid #f59e0b;
+      box-shadow: 0 0 15px rgba(245, 158, 11, 0.5);
+      overflow: hidden;
+      background: #140b28;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 18px;
+      color: #fcd34d;
+    }
+    .brand-title {
+      font-size: 15px;
+      font-weight: 900;
+      letter-spacing: 0.05em;
+      background: linear-gradient(135deg, #ffffff, #e9d5ff, #fde047);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .brand-sub {
+      font-size: 9px;
+      color: #a855f7;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+    }
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .user-pill {
+      background: #190d38;
+      border: 1px solid rgba(245, 158, 11, 0.5);
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 800;
+      color: #fde047;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+    .btn-login {
+      background: linear-gradient(135deg, #a855f7, #7c3aed);
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    /* CONTENT CONTAINERS */
+    .content-area {
+      flex: 1;
+      padding: 16px;
+      max-width: 600px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    /* PWA BANNER */
+    .pwa-banner {
+      background: linear-gradient(135deg, #1f103d, #14082c);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      border-radius: 16px;
+      padding: 12px 14px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    }
+    .pwa-text {
+      font-size: 11px;
+      color: #cbd5e1;
+      line-height: 1.4;
+    }
+    .pwa-text strong {
+      color: #38bdf8;
+    }
+    .pwa-btn {
+      background: #38bdf8;
+      color: #0b071a;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 800;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    /* SUB TABS FOR CREATOR HUB */
+    .subtabs {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+      margin-bottom: 16px;
+      scrollbar-width: none;
+    }
+    .subtabs::-webkit-scrollbar { display: none; }
+    .subtab-btn {
+      background: #140b2a;
+      border: 1px solid rgba(168, 85, 247, 0.25);
+      color: #94a3b8;
+      padding: 8px 14px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 800;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+    .subtab-btn.active {
+      background: linear-gradient(135deg, #ec4899, #f43f5e);
+      color: white;
+      border-color: #fda4af;
+      box-shadow: 0 4px 15px rgba(236, 72, 153, 0.4);
+    }
+    /* CARDS */
+    .card {
+      background: #130a28;
+      border: 1px solid rgba(168, 85, 247, 0.25);
+      border-radius: 20px;
+      padding: 16px;
+      margin-bottom: 14px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    }
+    .card-title {
+      font-size: 13px;
+      font-weight: 800;
+      color: #e2e8f0;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .stat-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .stat-box {
+      background: #1a0f35;
+      border: 1px solid rgba(168, 85, 247, 0.2);
+      border-radius: 14px;
+      padding: 12px;
+      text-align: center;
+    }
+    .stat-label {
+      font-size: 10px;
+      font-weight: 700;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 4px;
+    }
+    .stat-val {
+      font-size: 18px;
+      font-weight: 900;
+      color: #ffffff;
+    }
+    .stat-val.diamonds {
+      color: #38bdf8;
+    }
+    .stat-val.hours {
+      color: #34d399;
+    }
+    /* MATCH LIST */
+    .match-item {
+      background: #190e38;
+      border: 1px solid rgba(168, 85, 247, 0.3);
+      border-radius: 14px;
+      padding: 12px 14px;
+      margin-bottom: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .match-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .match-tag {
+      font-size: 9px;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 6px;
+      background: rgba(16, 185, 129, 0.2);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      text-transform: uppercase;
+    }
+    .match-vs {
+      font-size: 13px;
+      font-weight: 900;
+      color: #ffffff;
+    }
+    .match-details {
+      font-size: 11px;
+      color: #94a3b8;
+      display: flex;
+      gap: 12px;
+    }
+    .readonly-badge {
+      font-size: 10px;
+      font-weight: 800;
+      color: #fbbf24;
+      background: rgba(245, 158, 11, 0.15);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      padding: 3px 8px;
+      border-radius: 8px;
+      text-align: center;
+      margin-top: 4px;
+    }
+    /* BOTTOM NAVIGATION DOCK */
+    .dock {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 50;
+      background: rgba(12, 7, 34, 0.96);
+      backdrop-filter: blur(16px);
+      border-top: 1px solid rgba(168, 85, 247, 0.3);
+      padding: 8px 12px calc(8px + env(safe-area-inset-bottom, 0px));
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.9);
+    }
+    .dock-btn {
+      background: none;
+      border: none;
+      color: #94a3b8;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      cursor: pointer;
+      padding: 4px 10px;
+      border-radius: 12px;
+      transition: all 0.2s;
+    }
+    .dock-btn.active {
+      transform: scale(1.08);
+      font-weight: 900;
+    }
+    .dock-btn.active.tab-games { color: #38bdf8; }
+    .dock-btn.active.tab-creator { color: #f43f5e; }
+    .dock-btn.active.tab-academy { color: #34d399; }
+    .dock-btn.active.tab-shop { color: #fbbf24; }
+    .dock-icon {
+      font-size: 20px;
+    }
+    .dock-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    /* MODAL */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(8px);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .modal {
+      background: #140b2a;
+      border: 1px solid rgba(168, 85, 247, 0.4);
+      border-radius: 24px;
+      padding: 24px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9);
+    }
+    .modal h2 {
+      font-size: 18px;
+      font-weight: 900;
+      margin-bottom: 8px;
+      color: #ffffff;
+    }
+    .modal p {
+      font-size: 12px;
+      color: #94a3b8;
+      margin-bottom: 16px;
+      line-height: 1.4;
+    }
+    .form-group {
+      margin-bottom: 14px;
+    }
+    .form-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: #cbd5e1;
+      margin-bottom: 6px;
+      display: block;
+    }
+    .form-input {
+      width: 100%;
+      background: #0d071a;
+      border: 1px solid rgba(168, 85, 247, 0.35);
+      border-radius: 12px;
+      padding: 10px 14px;
+      color: white;
+      font-size: 13px;
+      outline: none;
+    }
+    .form-input:focus {
+      border-color: #a855f7;
+    }
+    .btn-submit {
+      width: 100%;
+      background: linear-gradient(135deg, #a855f7, #ec4899);
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 14px;
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+    .btn-close {
+      width: 100%;
+      background: transparent;
+      color: #94a3b8;
+      border: none;
+      padding: 10px;
+      font-size: 12px;
+      cursor: pointer;
+      margin-top: 4px;
+    }
+  </style>
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="header">
+    <div class="brand">
+      <div class="logo-ring">🌙</div>
+      <div>
+        <div class="brand-title">LUNARIS SUITE</div>
+        <div class="brand-sub">SMARTPHONE APP · CLOUD SYNC</div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <div id="creatorBadge" style="display: none;" class="user-pill" onclick="openCreatorModal()">
+        <span>🌟</span>
+        <span id="creatorHandleText">@creator</span>
+      </div>
+      <button id="loginBtn" class="btn-login" onclick="openLoginModal()">Accedi</button>
+    </div>
+  </header>
+
+  <!-- MAIN VIEW -->
+  <main class="content-area">
+    <!-- PWA INSTALL PROMPT BANNER -->
+    <div class="pwa-banner" id="pwaBanner">
+      <div class="pwa-text">
+        📲 <strong>Installa come App</strong> sulla tua Schermata Home per aprirla a tutto schermo come un'app nativa!
+      </div>
+      <button class="pwa-btn" onclick="alert('🍏 Su iPhone: tocca il tasto Condividi (in basso con la freccia) e premi \'Aggiungi alla schermata Home\'.\n\n🤖 Su Android: tocca i 3 puntini in alto a destra e premi \'Installa app\'.')">Installa</button>
+    </div>
+
+    <!-- TAB 1: GIOCHI ARCADE -->
+    <div id="view-games">
+      <div class="card">
+        <div class="card-title">
+          <span>🎮 SALA GIOCHI DIGITALE</span>
+          <span style="font-size: 11px; color: #38bdf8;" id="gamesCount">0 Titoli</span>
+        </div>
+        <p style="font-size: 12px; color: #94a3b8; line-height: 1.5; margin-bottom: 12px;">
+          Catalogo giochi centralizzato sincronizzato in tempo reale con il Cloud Lunaris.
+        </p>
+        <div id="gamesList">
+          <div style="text-align: center; padding: 20px; color: #64748b; font-size: 12px;">
+            Caricamento giochi in corso...
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 2: CREATOR HUB -->
+    <div id="view-creator" style="display: none;">
+      <div class="subtabs">
+        <button class="subtab-btn active" onclick="switchCreatorSubTab('matches')">🏆 Match Ufficiali</button>
+        <button class="subtab-btn" onclick="switchCreatorSubTab('metrics')">📊 Metriche Live</button>
+        <button class="subtab-btn" onclick="switchCreatorSubTab('sponsors')">💎 Sponsor & Saldi</button>
+        <button class="subtab-btn" onclick="switchCreatorSubTab('ranking')">👑 Top Creator</button>
+      </div>
+
+      <!-- MATCH UFFICIALI TERMINATI (SOLO VISIONE) -->
+      <div id="subtab-matches">
+        <div class="card">
+          <div class="card-title">
+            <span>🛡️ MATCH UFFICIALI CONVALIDATI</span>
+            <span class="match-tag">SOLO VISIONE</span>
+          </div>
+          <p style="font-size: 11px; color: #94a3b8; margin-bottom: 12px;">
+            Storico ufficiale delle sfide convalidate dal pannello Admin Lunaris.
+          </p>
+          <div id="matchesList">
+            <div style="text-align: center; padding: 20px; color: #64748b; font-size: 12px;">
+              Caricamento sfide convalidate...
+            </div>
+          </div>
+          <div class="readonly-badge">
+            🔒 Sezione gestita esclusivamente dal pannello Admin · I creator hanno accesso di sola visione
+          </div>
+        </div>
+      </div>
+
+      <!-- METRICHE LIVE TIKTOK -->
+      <div id="subtab-metrics" style="display: none;">
+        <div class="card">
+          <div class="card-title">
+            <span id="creatorMetricTitle">🌟 METRICHE CREATOR TIKTOK</span>
+            <span class="match-tag" style="background: rgba(56, 189, 248, 0.2); color: #38bdf8; border-color: rgba(56, 189, 248, 0.4);">LIVE</span>
+          </div>
+          <div class="stat-grid">
+            <div class="stat-box">
+              <div class="stat-label">Diamanti Accumulati</div>
+              <div class="stat-val diamonds" id="metricDiamonds">0</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-label">Ore Live Totali</div>
+              <div class="stat-val hours" id="metricHours">0h</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-label">Giorni Validi</div>
+              <div class="stat-val" id="metricDays">0/31</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-label">Picco Spettatori</div>
+              <div class="stat-val" style="color: #f59e0b;" id="metricPeak">0</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SPONSOR & SALDI -->
+      <div id="subtab-sponsors" style="display: none;">
+        <div class="card">
+          <div class="card-title">
+            <span>💎 SPONSORIZZAZIONI AGENZIA</span>
+          </div>
+          <div id="sponsorsList">
+            <div style="text-align: center; padding: 20px; color: #64748b; font-size: 12px;">
+              Caricamento sponsor...
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TOP CREATOR RANK -->
+      <div id="subtab-ranking" style="display: none;">
+        <div class="card">
+          <div class="card-title">
+            <span>👑 CLASSIFICA AGENZIA LUNARIS</span>
+          </div>
+          <div id="rankList">
+            <div style="text-align: center; padding: 20px; color: #64748b; font-size: 12px;">
+              Caricamento classifica creator...
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: ACADEMY -->
+    <div id="view-academy" style="display: none;">
+      <div class="card">
+        <div class="card-title">
+          <span>🎓 LUNARIS ACADEMY & GUIDES</span>
+        </div>
+        <div id="academyList">
+          <div style="text-align: center; padding: 20px; color: #64748b; font-size: 12px;">
+            Caricamento lezioni e guide...
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 4: SHOP -->
+    <div id="view-shop" style="display: none;">
+      <div class="card">
+        <div class="card-title">
+          <span>🛍️ LUNARIS SHOP & PREMI</span>
+        </div>
+        <div id="shopList">
+          <div style="text-align: center; padding: 20px; color: #64748b; font-size: 12px;">
+            Caricamento articoli shop...
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- NATIVE BOTTOM DOCK -->
+  <nav class="dock">
+    <button class="dock-btn active tab-games" id="btnTabGames" onclick="switchMainTab('games')">
+      <span class="dock-icon">🎮</span>
+      <span class="dock-label">Giochi</span>
+    </button>
+    <button class="dock-btn tab-creator" id="btnTabCreator" onclick="switchMainTab('creator')">
+      <span class="dock-icon">🌟</span>
+      <span class="dock-label">Creator</span>
+    </button>
+    <button class="dock-btn tab-academy" id="btnTabAcademy" onclick="switchMainTab('academy')">
+      <span class="dock-icon">🎓</span>
+      <span class="dock-label">Academy</span>
+    </button>
+    <button class="dock-btn tab-shop" id="btnTabShop" onclick="switchMainTab('shop')">
+      <span class="dock-icon">🛍️</span>
+      <span class="dock-label">Shop</span>
+    </button>
+  </nav>
+
+  <!-- LOGIN MODAL -->
+  <div class="modal-overlay" id="loginModal" style="display: none;">
+    <div class="modal">
+      <h2>Accesso Creator</h2>
+      <p>Inserisci il tuo @handle TikTok e la password personale per sincronizzare le tue statistiche, match e premi.</p>
+      <div class="form-group">
+        <label class="form-label">@ HANDLE TIKTOK</label>
+        <input type="text" id="inputHandle" class="form-input" placeholder="@il_tuo_nome" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">PASSWORD</label>
+        <input type="password" id="inputPass" class="form-input" placeholder="••••••••" />
+      </div>
+      <button class="btn-submit" onclick="performLogin()">Accedi Subito</button>
+      <button class="btn-close" onclick="closeLoginModal()">Annulla</button>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = 'https://hidden-rice-48fd.direttorelunaris.workers.dev';
+    let currentCreator = localStorage.getItem('lunaris_mobile_handle') || '';
+    let currentTab = 'games';
+    let currentCreatorSub = 'matches';
+
+    // Inizializza stato utente
+    if (currentCreator) {
+      document.getElementById('creatorBadge').style.display = 'flex';
+      document.getElementById('creatorHandleText').innerText = currentCreator;
+      document.getElementById('loginBtn').innerText = 'Esci';
+      document.getElementById('loginBtn').onclick = performLogout;
+    }
+
+    function switchMainTab(tab) {
+      currentTab = tab;
+      ['games', 'creator', 'academy', 'shop'].forEach(t => {
+        document.getElementById(`view-${t}`).style.display = (t === tab) ? 'block' : 'none';
+        const b = document.getElementById(`btnTab${t.charAt(0).toUpperCase() + t.slice(1)}`);
+        if (b) {
+          if (t === tab) b.classList.add('active');
+          else b.classList.remove('active');
+        }
+      });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function switchCreatorSubTab(sub) {
+      currentCreatorSub = sub;
+      ['matches', 'metrics', 'sponsors', 'ranking'].forEach(s => {
+        const el = document.getElementById(`subtab-${s}`);
+        if (el) el.style.display = (s === sub) ? 'block' : 'none';
+      });
+      const btns = document.querySelectorAll('.subtab-btn');
+      btns.forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+    }
+
+    function openLoginModal() {
+      document.getElementById('loginModal').style.display = 'flex';
+    }
+    function closeLoginModal() {
+      document.getElementById('loginModal').style.display = 'none';
+    }
+
+    async function performLogin() {
+      const handle = document.getElementById('inputHandle').value.trim();
+      const pass = document.getElementById('inputPass').value.trim();
+      if (!handle || !pass) return alert('Inserisci sia @handle che password!');
+
+      const cleanHandle = '@' + handle.replace(/^@/, '');
+      try {
+        const res = await fetch(`${API_BASE}/api/client/creator-login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            handle: cleanHandle,
+            password: pass,
+            machineId: 'SMARTPHONE_' + Math.random().toString(36).slice(2, 8).toUpperCase()
+          })
+        });
+        const data = await res.json();
+        if (data && data.success) {
+          currentCreator = cleanHandle;
+          localStorage.setItem('lunaris_mobile_handle', cleanHandle);
+          document.getElementById('creatorBadge').style.display = 'flex';
+          document.getElementById('creatorHandleText').innerText = cleanHandle;
+          document.getElementById('loginBtn').innerText = 'Esci';
+          document.getElementById('loginBtn').onclick = performLogout;
+          closeLoginModal();
+          alert('✓ Accesso eseguito con successo!');
+          loadData();
+        } else {
+          alert('Errore: ' + (data.error || 'Credenziali non valide'));
+        }
+      } catch (err) {
+        alert('Errore di connessione: ' + err.message);
+      }
+    }
+
+    function performLogout() {
+      if (confirm('Vuoi davvero disconnettere questo profilo dallo smartphone?')) {
+        currentCreator = '';
+        localStorage.removeItem('lunaris_mobile_handle');
+        document.getElementById('creatorBadge').style.display = 'none';
+        document.getElementById('loginBtn').innerText = 'Accedi';
+        document.getElementById('loginBtn').onclick = openLoginModal;
+        loadData();
+      }
+    }
+
+    // CARICAMENTO DATI REAL-TIME DAL CLOUD MASTER
+    async function loadData() {
+      try {
+        // 1. GIOCHI
+        const gRes = await fetch(`${API_BASE}/api/games`).catch(() => null);
+        if (gRes && gRes.ok) {
+          const games = await gRes.json();
+          document.getElementById('gamesCount').innerText = `${games.length} Titoli`;
+          const gHtml = games.map(g => `
+            <div style="background: #180f35; border: 1px solid rgba(168,85,247,0.25); border-radius: 14px; padding: 12px; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between;">
+              <div>
+                <div style="font-weight: 800; font-size: 13px; color: #fff;">${g.title}</div>
+                <div style="font-size: 10px; color: #94a3b8;">${g.category || 'Arcade'} · ${g.players || '1-2'} Giocatori</div>
+              </div>
+              <span style="font-size: 10px; font-weight: 800; color: #34d399; background: rgba(16,185,129,0.15); padding: 4px 8px; border-radius: 6px;">Sbloccato</span>
+            </div>
+          `).join('');
+          document.getElementById('gamesList').innerHTML = gHtml || '<div style="color: #64748b; font-size: 12px;">Nessun gioco disponibile.</div>';
+        }
+
+        // 2. MATCH UFFICIALI (SOLO VISIONE)
+        const mRes = await fetch(`${API_BASE}/api/matches`).catch(() => null);
+        if (mRes && mRes.ok) {
+          const matches = await mRes.json();
+          const validated = Array.isArray(matches) ? matches.filter(m => m.status === 'VALIDATED') : [];
+          if (validated.length === 0) {
+            document.getElementById('matchesList').innerHTML = '<div style="color: #64748b; font-size: 12px; text-align: center; padding: 16px;">Nessun match ufficiale convalidato al momento.</div>';
+          } else {
+            document.getElementById('matchesList').innerHTML = validated.map(m => `
+              <div class="match-item">
+                <div class="match-header">
+                  <span class="match-tag">✓ CONVALIDATO ADMIN</span>
+                  <span style="font-size: 10px; color: #94a3b8;">${new Date(m.validatedAt || m.createdAt || Date.now()).toLocaleDateString('it-IT')}</span>
+                </div>
+                <div class="match-vs">${m.creator1Handle} vs ${m.creator2Handle}</div>
+                <div class="match-details">
+                  <span>🏆 Vincitore: <strong style="color: #38bdf8;">${m.winnerHandle || 'Da determinare'}</strong></span>
+                  <span>💎 Punti: ${Number(m.totalDiamonds || 0).toLocaleString()}</span>
+                </div>
+              </div>
+            `).join('');
+          }
+        }
+
+        // 3. METRICHE CREATOR (SE LOGGATO)
+        if (currentCreator) {
+          document.getElementById('creatorMetricTitle').innerText = `🌟 METRICHE DI ${currentCreator.toUpperCase()}`;
+          const cRes = await fetch(`${API_BASE}/api/tiktok/creator/${encodeURIComponent(currentCreator.replace('@', ''))}`).catch(() => null);
+          if (cRes && cRes.ok) {
+            const cData = await cRes.json();
+            if (cData && cData.creator) {
+              const c = cData.creator;
+              document.getElementById('metricDiamonds').innerText = Number(c.diamonds || 0).toLocaleString();
+              document.getElementById('metricHours').innerText = `${c.liveHours || 0}h`;
+              document.getElementById('metricDays').innerText = `${c.validDays || 0}/31`;
+              document.getElementById('metricPeak').innerText = Number(c.peakViewers || 0).toLocaleString();
+            }
+          }
+        }
+
+        // 4. ACADEMY
+        const aRes = await fetch(`${API_BASE}/api/academy`).catch(() => null);
+        if (aRes && aRes.ok) {
+          const aData = await aRes.json();
+          const lessons = aData.lessons || [];
+          document.getElementById('academyList').innerHTML = lessons.map(l => `
+            <div style="background: #180f35; border: 1px solid rgba(168,85,247,0.25); border-radius: 14px; padding: 14px; margin-bottom: 10px;">
+              <div style="font-size: 13px; font-weight: 800; color: #34d399; margin-bottom: 4px;">${l.title}</div>
+              <div style="font-size: 11px; color: #cbd5e1; line-height: 1.4;">${l.content || l.description || ''}</div>
+            </div>
+          `).join('') || '<div style="color: #64748b; font-size: 12px;">Nessuna lezione pubblicata.</div>';
+        }
+
+        // 5. SHOP
+        const sRes = await fetch(`${API_BASE}/api/shop`).catch(() => null);
+        if (sRes && sRes.ok) {
+          const sData = await sRes.json();
+          const items = sData.items || [];
+          document.getElementById('shopList').innerHTML = items.map(i => `
+            <div style="background: #180f35; border: 1px solid rgba(245,158,11,0.3); border-radius: 14px; padding: 14px; margin-bottom: 10px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                <span style="font-size: 13px; font-weight: 800; color: #fbbf24;">${i.title}</span>
+                <span style="font-size: 10px; font-weight: 700; color: ${i.quantity > 0 ? '#34d399' : '#f87171'};">
+                  ${i.quantity > 0 ? `Disponibili: ${i.quantity}` : 'Esaurito'}
+                </span>
+              </div>
+              <div style="font-size: 11px; color: #94a3b8; margin-bottom: 8px;">${i.description || ''}</div>
+              <div style="font-size: 12px; font-weight: 900; color: #38bdf8;">
+                💎 ${Number(i.priceDiamonds || 0).toLocaleString()} Diamanti · oppure €${Number(i.priceEur || 0).toFixed(2)}
+              </div>
+            </div>
+          `).join('') || '<div style="color: #64748b; font-size: 12px;">Nessun articolo disponibile nello Shop.</div>';
+        }
+      } catch (e) {
+        console.error('Sync error:', e);
+      }
+    }
+
+    // Carica al boot e aggiorna automaticamente ogni 30 secondi
+    loadData();
+    setInterval(loadData, 30000);
+  </script>
+</body>
+</html>
